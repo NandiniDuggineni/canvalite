@@ -1,0 +1,6 @@
+body { font-family: Arial, sans-serif; }
+.container { display: flex; }
+.sidebar { width: 200px; margin-right: 20px; }
+.main { flex: 1; }
+button { margin: 5px; }
+input { display: block; margin-bottom: 5px; width: 100%; padding: 5px; }
