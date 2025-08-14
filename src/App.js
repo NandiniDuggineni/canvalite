@@ -7,11 +7,24 @@ export default function App() {
   const [user, setUser] = useState(null);
   const [selectedDesign, setSelectedDesign] = useState(null);
   const [refreshDesignList, setRefreshDesignList] = useState(false);
+  const [loading, setLoading] = useState(true); // <--- added
 
   useEffect(() => {
     const getSession = async () => {
-      const { data } = await supabase.auth.getSession();
-      setUser(data.session?.user ?? null);
+      try {
+        const { data, error } = await supabase.auth.getSession();
+        if (error) {
+          console.error("Supabase getSession error:", error);
+          setUser(null);
+        } else {
+          setUser(data.session?.user ?? null);
+        }
+      } catch (err) {
+        console.error("Unexpected error fetching session:", err);
+        setUser(null);
+      } finally {
+        setLoading(false); // <--- added
+      }
     };
     getSession();
 
@@ -28,6 +41,8 @@ export default function App() {
     setUser(null);
     setSelectedDesign(null);
   };
+
+  if (loading) return <div>Loading...</div>; // <--- added
 
   return (
     <div style={{ padding: 20 }}>
